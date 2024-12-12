@@ -263,8 +263,7 @@ _:
         NEXT
 
         defcode("<<",2, 0, left_shift)
-        xor a
-        rl c
+        sla c
         rl b
         NEXT
 
