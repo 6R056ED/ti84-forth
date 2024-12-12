@@ -1068,13 +1068,13 @@ akey_asm:
         ld h, 0
         ld l , a
         cp kSpace
-        jp z, akey_return_space
+        jr z, akey_return_space
         ld de, key_table
         ;; Add the offset
         add hl, de
         ld a, (hl)
         cp ' '
-        jp z, akey_asm
+        jr z, akey_asm
         ret
 
 akey_return_space:
@@ -1603,10 +1603,10 @@ dd_setBit:
         ld a, b
 add16to32:
         add ix, de
-        jp nc, add16to32_done
+        jr nc, add16to32_done
         or a
         inc c
-        jp z, add16to32_done
+        jr z, add16to32_done
         add a, 1
 add16to32_done:
         ld b, a
@@ -2089,8 +2089,7 @@ word_done:
 
 find_loop:
         call strcmp
-        jp z, find_succeed
-        jp nz, find_retry
+        jr nz, find_retry
 
 find_succeed:
         ;; We found the word.  But is it hidden?
@@ -2118,21 +2117,14 @@ find_succ_hidden:
         ld h, a
         dec de
         ld a, l
-        or a
-        jr z, find_maybe_fail
-
-find_retry_cont:
+        or h
+        jr z, find_fail
         inc hl
         inc hl
         inc hl
         ex de,hl
         pop hl
-        jp find_loop
-find_maybe_fail:
-        ld a, h
-        cp 0 ;; or a
-        jp z, find_fail
-        jp nz, find_retry_cont
+        jr find_loop
 find_fail:
         pop hl
         pop de
