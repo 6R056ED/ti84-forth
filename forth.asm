@@ -449,14 +449,11 @@ _:
         ;; BC now contains the string length
         inc hl
         push hl ;; push address of string
-        ;; BC now contains the string length
-
         ;; Skip the string.
         add hl, bc
         ;; Skip null pointer.  (Even though we have the length, because
         ;; we don't have a bcall Linux that can print out a string with
         ;; a certain length).
-
         inc hl
         ex de, hl
         NEXT
