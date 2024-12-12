@@ -18,20 +18,21 @@
 #defcont         \ inc ix
 
 ;; Push HL to the return stack.
-;; 19 + 10 + 19 + 10 = 58
+;; 10 + 19 + 10 + 19 = 58
 #define PUSH_HL_RS dec ix
 #defcont         \ ld (ix + 0), h
 #defcont         \ dec ix
 #defcont         \ ld (ix + 0), l
 
-#define POP_HL_RS  ld l, (ix + 0)
+;; Pop the top entry of the return stack to HL.
 ;; 19 + 10 + 19 + 10 = 58
+#define POP_HL_RS  ld l, (ix + 0)
 #defcont         \ inc ix
 #defcont         \ ld h, (ix + 0)
 #defcont         \ inc ix
 
 ;; Push DE to the return stack.
-;; 19 + 10 + 19 + 10 = 58
+;; 10 + 19 + 10 + 19 = 58
 #define PUSH_DE_RS dec ix
 #defcont         \ ld (ix + 0), d
 #defcont         \ dec ix
