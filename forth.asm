@@ -4,7 +4,7 @@
 
 
 ;; Push BC to the return stack.
-;; 4 + 19 + 4 + 19 = 46
+;; 10 + 19 + 10 + 19 = 58
 #define PUSH_BC_RS dec ix
 #defcont         \ ld (ix + 0), b
 #defcont         \ dec ix
@@ -18,7 +18,7 @@
 #defcont         \ inc ix
 
 ;; Push HL to the return stack.
-;; 4 + 19 + 4 + 19 = 46
+;; 19 + 10 + 19 + 10 = 58
 #define PUSH_HL_RS dec ix
 #defcont         \ ld (ix + 0), h
 #defcont         \ dec ix
@@ -31,7 +31,7 @@
 #defcont         \ inc ix
 
 ;; Push DE to the return stack.
-;; 4 + 19 + 4 + 19 = 46
+;; 19 + 10 + 19 + 10 = 58
 #define PUSH_DE_RS dec ix
 #defcont         \ ld (ix + 0), d
 #defcont         \ dec ix
@@ -429,31 +429,29 @@ _:
         NEXT
 
         defcode("LIT",3,0,lit)
-        ld a, (de)
-        ld l, a
-        inc de
-        ld a, (de)
-        ld h, a
-        inc de
         push bc
-        HL_TO_BC
+        ld a, (de)
+        ld c, a
+        inc de
+        ld a, (de)
+        ld b, a
+        inc de
         NEXT
 
         defcode("LITSTR",6,0,litstring)
         ;; String length
-        ld a, (de)
-        ld l, a
-        inc de
-        ld a, (de)
-        ld h, a
-        inc de
-
         push bc ;; old stack top
-        push de ;; push address of string
-        HL_TO_BC ;; BC now contains the string length
+        ex de, hl
+        ld c, (hl)
+        inc hl
+        ld b, (hl)
+        ;; BC now contains the string length
+        inc hl
+        push hl ;; push address of string
+        ;; BC now contains the string length
 
         ;; Skip the string.
-        add hl, de
+        add hl, bc
         ;; Skip null pointer.  (Even though we have the length, because
         ;; we don't have a bcall Linux that can print out a string with
         ;; a certain length).
