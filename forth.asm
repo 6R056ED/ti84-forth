@@ -122,14 +122,14 @@ docol:
         NEXT
 
 
-next_sub:               ;; Cycle count (total 47)
+next_sub:               ;; Cycle count (total 38)
         ld a, (de)      ;; 7
         ld l, a         ;; 4
         inc de          ;; 6
         ld a, (de)      ;; 7
         ld h, a         ;; 4
         inc de          ;; 6
-        jp (hl)         ;; 13
+        jp (hl)         ;; 4
 
 
 done:
@@ -1066,15 +1066,19 @@ akey_asm:
         b_call _GetKey
         ;; a contains the byte received.
         ld h, 0
-        ld l, a
+        ld l , a
         cp kSpace
-        ld a, ' '
-        ret z
+        jp z, akey_return_space
         ld de, key_table
         ;; Add the offset
         add hl, de
-        cp (hl)
+        ld a, (hl)
+        cp ' '
         jp z, akey_asm
+        ret
+
+akey_return_space:
+        ld a, ' '
         ret
 
         defcode("TO_ASCII",8,0,to_ascii)
